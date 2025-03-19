@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>수식어(modifier)</title>
+  </head>
+  <body>
+    <!-- 
+    v-model 수식어 : v-model 디렉티브에 추가 옵션을 제공하는 문법
+      - lazy : 입력 시 반영 대신 포커스가 빠져나갈 때 반영
+        <input type="text" v-model.lazy="message" />
+
+      - number : 입력 시 숫자로 변환
+        <input type="text" v-model.number="age" />
+
+      - trim : 입력 시 양쪽 공백 제거
+        <input type="text" v-model.trim="message" />
+  -->
+    <div id="app">
+      <div>
+        <h4>lazy 수식어</h4>
+        lazy 테스트 : <input type="text" v-model.lazy="lazyTest" />
+        <br />
+        입력된 값 : <input type="text" v-bind:value="lazyTest" readonly />
+      </div>
+
+      <div>
+        <h4>number 수식어</h4>
+        number : <input type="text" v-model.number="num" /><br />
+        입력된 수 : <span>{{num}}</span>
+      </div>
+
+      <div>
+        <h4>trim 수식어</h4>
+        trim 테스트 : <input type="text" v-model.trim="trimTest" />
+        <br />
+        <!-- 입력된 메시지 : <span>{{trimTest}}</span> -->
+        입력된 값 : <input type="text" v-bind:value="trimTest" readonly />
+      </div>
+    </div>
+
+    <script src="http://unpkg.com/vue"></script>
+    <script>
+      const vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return { num: 0, lazyTest: '', trimTest: '' };
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>
