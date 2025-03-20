@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 검색 입력 폼 
+          - v-model.trim="name" : 입력 값 양쪽 공백 제거, data 옵션션 name에 바인딩
+          - @keyup.enter="searchName" : 엔터 키 입력 시 searchName() 함수 호출
+        -->
+      이름 :
+      <input
+        type="text"
+        v-model.trim="name"
+        @keyup.enter="searchName"
+        placeholder="두글자 이상 입력후 엔터!"
+      /><br />
+
+      <!-- 검색 결과 표시 -->
+      <ul>
+        <li v-for="c in contacts" :key="c.no">{{c.name}} : {{c.tel}}</li>
+      </ul>
+
+      <!-- 로딩 상태 표시 -->
+      <div v-show="isLoading">검색중</div>
+    </div>
+
+    <!-- 라이브러리 추가 -->
+
+    <!-- vue : 프론트엔드 프레임워크 -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <!-- axios : 비동기 통신 라이브러리 -->
+    <script src="https://unpkg.com/axios"></script>
+
+    <!-- lodash : 유틸리티 라이브러리 -->
+    <script src="https://unpkg.com/lodash"></script>
+
+    <script>
+      const BASEURL = 'https://contactsvc.bmaster.kro.kr';
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          // 데이터 변경경 추적 관리 (== 데이터 바인딩)
+          return { name: '', contacts: [], isLoading: false };
+        },
+        methods: {
+          // Vue 인스턴스가 사용할 함수를 정의하는 속성
+          searchName() {
+            if (this.name.length >= 2) {
+              this.fetchContacts();
+            } else {
+              this.contacts = [];
+            }
+          },
+
+          // _.debounce() : 연속적인 함수 호출을 제한하여 마지막 호출 후 일정 시간이 지난 후에만 실행
+          // 300ms 동안 추가 호출이 없을 때만 실제 함수 실행 (과도한 API 호출 방지)
+          fetchContacts: _.debounce(function () {
+            // 로딩 상태(검색중중) 표시 시작
+            this.isLoading = true;
+
+            // axios를 사용하여 비동기 HTTP GET 요청 수행
+            axios
+              .get(BASEURL + `/contacts_long/search/${this.name}`)
+              .then((response) => {
+                // 응답 상태 코드 확인 (200: 성공)
+                console.log('상태 코드:', response.status);
+
+                // 응답이 성공적인지 확인 (status가 200~299 사이인 경우)
+                if (response.status >= 200 && response.status < 300) {
+                  console.log('API 요청 성공!');
+
+                  // 응답이 오면 로딩 상태(검색중) 종료
+                  this.isLoading = false;
+                  // 응답 데이터를 contacts 배열에 할당하여 화면에 표시
+                  this.contacts = response.data;
+                } else {
+                  console.log('API 요청 실패!');
+                }
+              });
+          }, 300),
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>

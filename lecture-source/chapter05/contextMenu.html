@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      @이벤트.prevent 확인
+      <div @contextmenu.prevent style="position: absolute; inset: 0"></div>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        methods: {
+          // 작성된 메서드 없음
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>
