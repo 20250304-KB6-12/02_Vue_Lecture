@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .buttonColor {
+        background-color: aqua;
+        color: black;
+      }
+      .buttonLayout {
+        text-align: center;
+        width: 200px;
+      }
+      .staticBorder {
+        border: khaki dashed 1px;
+      }
+
+      .text-size {
+        font-size: 24px;
+      }
+
+      .text-color {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <input type="checkbox" v-model="isMyLayout" />레이아웃 적용 여부<br />
+      <input type="checkbox" v-model="isTextSize" />텍스트 크기 적용 여부(체크
+      시 적용)<br />
+      <input type="checkbox" v-model="isTextColor" />텍스트 색상 적용 여부(체크
+      해제 시 적용)<br />
+
+      <button
+        class="staticBorder"
+        :class="
+          [
+           myColor, 
+           
+           isMyLayout ? myLayout : '',
+
+           isTextSize && myTextSize, 
+
+           isTextColor || myTextColor
+          ]"
+      >
+        테스트 버튼
+      </button>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return {
+            // 삼항 연산자 : 조건 ? 조건이 참인 경우 : 조건이 거짓인 경우
+            myColor: 'buttonColor',
+            myLayout: 'buttonLayout',
+            isMyLayout: false,
+
+            // && 단축 평가 : isTextSize 속성 값이 true인 경우 myTextSize 클래스 적용
+            isTextSize: false,
+            myTextSize: 'text-size',
+
+            // || 단축 평가 : isTextColor 속성 값이 false인 경우 myTextColor 클래스 적용
+            isTextColor: false,
+            myTextColor: 'text-color',
+          };
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>
